@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsautoscaling"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awseks"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -26,6 +28,28 @@ func NewCdkEksStack(scope constructs.Construct, id string, props *CdkEksStackPro
 	workerRole := awsiam.NewRole(stack, jsii.String("EKSWorkerRole"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
 	})
+
+	// To Create EKS Cluster
+	eksCluster := awseks.NewCluster(stack, jsii.String("Cluster"), &awseks.ClusterProps{
+		Vpc:             vpc,
+		DefaultCapacity: jsii.Number(0),
+		Version:         awseks.KubernetesVersion_Of(jsii.String("1.21")),
+	})
+
+	// Autoscaling Nodes
+	onDemandASG := awsautoscaling.NewAutoScalingGroup(stack, jsii.String("OnDemandASG"), &awsautoscaling.AutoScalingGroupProps{
+		Vpc:          vpc,
+		Role:         workerRole,
+		MinCapacity:  jsii.Number(1),
+		MaxCapacity:  jsii.Number(10),
+		InstanceType: awsec2.NewInstanceType(jsii.String("t3.medium")),
+		MachineImage: awseks.NewEksOptimizedImage(&awseks.EksOptimizedImageProps{
+			KubernetesVersion: jsii.String("1.21"),
+			NodeType:          awseks.NodeType_STANDARD,
+		}),
+	})
+
+	eksCluster.ConnectAutoScalingGroupCapacity(onDemandASG, &awseks.AutoScalingGroupOptions{})
 
 	return stack
 }
@@ -61,8 +85,6 @@ func env() *awscdk.Environment {
 	//  Region:  jsii.String("us-east-1"),
 	// }
 
-	// Uncomment to specialize this stack for the AWS Account and Region that are
-	// implied by the current CLI configuration. This is recommended for dev
 	// stacks.
 	//---------------------------------------------------------------------------
 	// return &awscdk.Environment{

@@ -2,31 +2,30 @@ package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awssns"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awssnssubscriptions"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
 
-type CdkWorkshopStackProps struct {
+type CdkEksStackProps struct {
 	awscdk.StackProps
 }
 
-func NewCdkWorkshopStack(scope constructs.Construct, id string, props *CdkWorkshopStackProps) awscdk.Stack {
+func NewCdkEksStack(scope constructs.Construct, id string, props *CdkEksStackProps) awscdk.Stack {
 	var sprops awscdk.StackProps
 	if props != nil {
 		sprops = props.StackProps
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// Create a new VPC for our cluster
+	vpc := awsec2.NewVpc(stack, jsii.String("EKSVpc"), nil)
 
-	queue := awssqs.NewQueue(stack, jsii.String("CdkWorkshopQueue"), &awssqs.QueueProps{
-		VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
+	// IAM role for our EC2 worker nodes
+	workerRole := awsiam.NewRole(stack, jsii.String("EKSWorkerRole"), &awsiam.RoleProps{
+		AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
 	})
-
-	topic := awssns.NewTopic(stack, jsii.String("CdkWorkshopTopic"), &awssns.TopicProps{})
-	topic.AddSubscription(awssnssubscriptions.NewSqsSubscription(queue, &awssnssubscriptions.SqsSubscriptionProps{}))
 
 	return stack
 }
@@ -36,7 +35,7 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	NewCdkWorkshopStack(app, "CdkWorkshopStack", &CdkWorkshopStackProps{
+	NewCdkEksStack(app, "CdkEksStack", &CdkEksStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},

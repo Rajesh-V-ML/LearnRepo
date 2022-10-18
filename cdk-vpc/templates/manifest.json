@@ -1,0 +1,148 @@
+{
+  "version": "21.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "vpc-stack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "vpc-stack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "vpc-stack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "vpc-stack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/3c8582ea9a39bdbb1083646a611a6fdda52f66b5c8a00a2de02156b602ae7310.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "vpc-stack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "vpc-stack.assets"
+      ],
+      "metadata": {
+        "/vpc-stack/rajevenu-vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpc8AFD4B1C"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPublicSubnet1Subnet86F3B01C"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPublicSubnet1RouteTableE5877974"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPublicSubnet1RouteTableAssociationD8CD34D0"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPublicSubnet1DefaultRoute7292186E"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPublicSubnet1EIP69A3F651"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPublicSubnet1NATGateway8448ACC0"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPrivateSubnet1Subnet0938891A"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPrivateSubnet1RouteTableEC6987F8"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPrivateSubnet1RouteTableAssociationA7AEC7D4"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcPrivateSubnet1DefaultRouteDB33256D"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcIGWE2EBB0AD"
+          }
+        ],
+        "/vpc-stack/rajevenu-vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rajevenuvpcVPCGW44512197"
+          }
+        ],
+        "/vpc-stack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/vpc-stack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/vpc-stack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/vpc-stack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "vpc-stack"
+    }
+  }
+}

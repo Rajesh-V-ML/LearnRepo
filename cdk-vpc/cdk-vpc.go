@@ -4,6 +4,7 @@ import (
 	"cdk-vpc/vpc"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/jsii-runtime-go"
 )
 
 func main() {
@@ -20,6 +21,10 @@ func main() {
 }
 
 func env() *awscdk.Environment {
-	return nil
+
+	return &awscdk.Environment{
+		Account: jsii.String("469875231790"),
+		Region:  jsii.String("ap-south-1"),
+	}
 
 }

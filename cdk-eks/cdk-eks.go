@@ -22,7 +22,7 @@ func NewCdkEksStack(scope constructs.Construct, id string, props *CdkEksStackPro
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	// Create a new VPC for our cluster
-	vpc := awsec2.NewVpc(stack, jsii.String("EKSVpc"), nil)
+	vpc := awsec2.NewVpc(stack, jsii.String("rajevenu-vpc"), nil)
 
 	// IAM role for our EC2 worker nodes
 	workerRole := awsiam.NewRole(stack, jsii.String("EKSWorkerRole"), &awsiam.RoleProps{
@@ -30,7 +30,7 @@ func NewCdkEksStack(scope constructs.Construct, id string, props *CdkEksStackPro
 	})
 
 	// To Create EKS Cluster
-	eksCluster := awseks.NewCluster(stack, jsii.String("Cluster"), &awseks.ClusterProps{
+	eksCluster := awseks.NewCluster(stack, jsii.String("Rajevenu_Cluster"), &awseks.ClusterProps{
 		Vpc:             vpc,
 		DefaultCapacity: jsii.Number(0),
 		Version:         awseks.KubernetesVersion_Of(jsii.String("1.21")),
@@ -41,7 +41,7 @@ func NewCdkEksStack(scope constructs.Construct, id string, props *CdkEksStackPro
 		Vpc:          vpc,
 		Role:         workerRole,
 		MinCapacity:  jsii.Number(1),
-		MaxCapacity:  jsii.Number(10),
+		MaxCapacity:  jsii.Number(2),
 		InstanceType: awsec2.NewInstanceType(jsii.String("t3.medium")),
 		MachineImage: awseks.NewEksOptimizedImage(&awseks.EksOptimizedImageProps{
 			KubernetesVersion: jsii.String("1.21"),

@@ -1,20 +1,22 @@
 global:
-  datacenter: dc1
-  image: "consul:latest"# Expose the Consul UI through this LoadBalancer
+  name: consul
+  datacenter: hashidc1
 ui:
+  enabled: true
   service:
-    type: "LoadBalancer"# Allow Consul to inject the Connect proxy into Kubernetes containers
+    type: LoadBalancer
+    annotations: |
+      'service.beta.kubernetes.io/aws-load-balancer-internal': "true"
 connectInject:
-  enabled: true# Configure a Consul client on Kubernetes nodes. GRPC listener is required for Connect.
-client:
   enabled: true
-  grpc: true# Minimal Consul configuration. Not suitable for production.
-server:
-  replicas: 1
-  bootstrapExpect: 1
-  disruptionBudget:
-    enabled: true
-    maxUnavailable: 0# Sync Kubernetes and Consul services
-syncCatalog:
+  default: true
+controller:
   enabled: true
-  
+ingressGateways:
+  enabled: true
+  gateways:
+    - name: ingress-gateway
+      service:
+        type: LoadBalancer
+        annotations: |
+          'service.beta.kubernetes.io/aws-load-balancer-internal': "true"

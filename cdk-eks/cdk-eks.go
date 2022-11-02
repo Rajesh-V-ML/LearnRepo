@@ -25,7 +25,7 @@ func NewCdkEksStack(scope constructs.Construct, id string, props *CdkEksStackPro
 	vpc := awsec2.NewVpc(stack, jsii.String("rajevenu-vpc"), nil)
 
 	// IAM role for our EC2 worker nodes
-	workerRole := awsiam.NewRole(stack, jsii.String("EKSWorkerRole"), &awsiam.RoleProps{
+	workerRole := awsiam.NewRole(stack, jsii.String("rajevenueks"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
 	})
 
@@ -59,7 +59,7 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	NewCdkEksStack(app, "CdkEksStack", &CdkEksStackProps{
+	NewCdkEksStack(app, "rajevenu-eks", &CdkEksStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},
